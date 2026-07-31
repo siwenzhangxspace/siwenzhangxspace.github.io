@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HCC Recurrence Prediction Tools | Resource Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-blue: #60a5fa;
+            --accent-cyan: #22d3ee;
+            --accent-purple: #a78bfa;
+            --accent-pink: #f472b6;
+            --accent-green: #34d399;
+            --accent-orange: #fbbf24;
+            --accent-red: #f87171;
+            --accent-indigo: #818cf8;
+            --border-color: #475569;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 20px rgba(96, 165, 250, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .bg-pattern {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(96,165,250,0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(167,139,250,0.08) 0%, transparent 40%);
+        }
+
+        .container { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+        header { text-align: center; padding: 60px 20px 40px; }
+        .badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 20px; background: rgba(96,165,250,0.08);
+            border: 1px solid rgba(96,165,250,0.15); border-radius: 50px;
+            font-size: 0.9em; color: var(--accent-blue); margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .badge::before { content: ''; width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(0.8);} }
+
+        header h1 {
+            font-size: 2.8em; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #22d3ee 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        header p { font-size: 1.1em; color: var(--text-secondary); max-width: 760px; margin: 0 auto; line-height: 1.7; }
+
+        .stats-bar { display: flex; justify-content: center; gap: 16px; margin: 32px 0; flex-wrap: wrap; }
+        .stat-item {
+            background: var(--bg-secondary); border: 1px solid var(--border-color);
+            padding: 18px 28px; border-radius: 14px; text-align: center; min-width: 130px;
+            transition: all 0.3s ease; box-shadow: var(--shadow-sm);
+        }
+        .stat-item:hover { border-color: var(--accent-blue); transform: translateY(-2px); box-shadow: var(--shadow-glow); }
+        .stat-number { font-size: 2em; font-weight: 700; background: linear-gradient(135deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; }
+        .stat-label { font-size: 0.85em; color: var(--text-secondary); margin-top: 4px; }
+
+        .filter-section {
+            background: var(--bg-secondary); border: 1px solid var(--border-color);
+            border-radius: 14px; padding: 14px 20px; margin: 24px 0;
+            display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center;
+            position: sticky; top: 16px; z-index: 100;
+            box-shadow: var(--shadow-md);
+        }
+        .filter-label { font-weight: 600; color: var(--text-primary); font-size: 0.9em; }
+        .filter-tag {
+            padding: 7px 16px; border: 1px solid var(--border-color); border-radius: 8px;
+            cursor: pointer; transition: all 0.3s ease; font-size: 0.85em;
+            color: var(--text-secondary); background: transparent; font-weight: 500;
+        }
+        .filter-tag:hover { border-color: var(--accent-blue); color: var(--accent-blue); background: rgba(96,165,250,0.05); }
+        .filter-tag.active { border-color: var(--accent-blue); background: linear-gradient(135deg, rgba(96,165,250,0.1), rgba(167,139,250,0.08)); color: var(--text-primary); box-shadow: 0 0 8px rgba(96,165,250,0.1); }
+
+        .section-title {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 1.5em; font-weight: 600; margin: 48px 0 20px;
+            color: var(--text-primary); padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .section-title .icon { font-size: 1.2em; }
+        .section-title .line { flex: 1; height: 2px; background: linear-gradient(to right, var(--border-color), transparent); }
+
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 20px; margin-top: 20px; }
+
+        .tool-card {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 24px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .tool-card::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .tool-card:hover { transform: translateY(-4px); border-color: rgba(96,165,250,0.25); box-shadow: var(--shadow-lg), var(--shadow-glow); }
+        .tool-card:hover::before { opacity: 1; }
+
+        .tool-card.featured { border-color: rgba(245,158,11,0.3); background: linear-gradient(135deg, rgba(245,158,11,0.03), var(--bg-card)); }
+        .tool-card.featured::before { background: linear-gradient(90deg, var(--accent-orange), var(--accent-red)); opacity: 1; }
+
+        .tool-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 12px; }
+        .tool-name { font-size: 1.1em; font-weight: 600; color: var(--text-primary); line-height: 1.4; flex: 1; }
+        .tool-badges { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+        .tool-type {
+            display: inline-flex; align-items: center; padding: 3px 10px;
+            border-radius: 6px; font-size: 0.75em; font-weight: 600; letter-spacing: 0.02em;
+        }
+        .type-clinical { background: rgba(96,165,250,0.08); color: #60a5fa; border: 1px solid rgba(96,165,250,0.18); }
+        .type-bulk { background: rgba(167,139,250,0.08); color: #7c3aed; border: 1px solid rgba(167,139,250,0.18); }
+        .type-ai { background: rgba(236,72,153,0.08); color: #db2777; border: 1px solid rgba(236,72,153,0.18); }
+        .type-spatial { background: rgba(16,185,129,0.08); color: #059669; border: 1px solid rgba(16,185,129,0.18); }
+        .type-liquid { background: rgba(99,102,241,0.08); color: #4f46e5; border: 1px solid rgba(99,102,241,0.18); }
+        .type-staging { background: rgba(100,116,139,0.08); color: #475569; border: 1px solid rgba(100,116,139,0.18); }
+        .featured-badge {
+            display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px;
+            background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(239,68,68,0.06));
+            color: #fbbf24; border: 1px solid rgba(245,158,11,0.2);
+            border-radius: 6px; font-size: 0.7em; font-weight: 700;
+        }
+
+        .tool-description { color: var(--text-secondary); line-height: 1.65; margin-bottom: 14px; font-size: 0.92em; }
+        .tool-meta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 14px 0; }
+        .meta-item { display: flex; flex-direction: column; gap: 2px; }
+        .meta-label { font-size: 0.72em; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 600; }
+        .meta-value { font-size: 0.85em; color: var(--text-secondary); line-height: 1.4; }
+        .meta-value.performance { color: var(--accent-green); font-weight: 600; }
+
+        .tool-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+        .tool-link {
+            display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px;
+            background: linear-gradient(135deg, rgba(96,165,250,0.08), rgba(167,139,250,0.05));
+            border: 1px solid rgba(96,165,250,0.2); color: #60a5fa;
+            text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 0.85em;
+            transition: all 0.3s ease;
+        }
+        .tool-link:hover { background: linear-gradient(135deg, rgba(96,165,250,0.15), rgba(167,139,250,0.1)); border-color: var(--accent-blue); color: #60a5fa; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(96,165,250,0.12); }
+        .tool-link.reference { background: transparent; border-color: var(--border-color); color: var(--text-secondary); }
+        .tool-link.reference:hover { border-color: var(--accent-blue); color: var(--accent-blue); box-shadow: none; }
+
+        .summary-table-section { margin: 48px 0; }
+        .summary-table {
+            width: 100%; border-collapse: collapse; background: var(--bg-secondary);
+            border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .summary-table th {
+            background: linear-gradient(135deg, rgba(96,165,250,0.08), rgba(167,139,250,0.05));
+            color: var(--text-primary); padding: 14px 12px; text-align: left; font-weight: 600;
+            font-size: 0.85em; border-bottom: 1px solid var(--border-color);
+        }
+        .summary-table td {
+            padding: 12px; color: var(--text-secondary); font-size: 0.85em;
+            border-bottom: 1px solid var(--border-color); vertical-align: top;
+        }
+        .summary-table tr:hover td { background: rgba(96,165,250,0.03); }
+        .summary-table tr:last-child td { border-bottom: none; }
+
+        .note-box {
+            background: linear-gradient(135deg, rgba(96,165,250,0.04), rgba(167,139,250,0.02));
+            border: 1px solid rgba(96,165,250,0.12); border-radius: 16px;
+            padding: 28px; margin: 48px 0; position: relative; overflow: hidden;
+        }
+        .note-box::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple)); }
+        .note-box h3 { color: var(--text-primary); margin-bottom: 14px; font-size: 1.15em; display: flex; align-items: center; gap: 8px; }
+        .note-box p { color: var(--text-secondary); line-height: 1.75; margin-bottom: 10px; }
+        .note-box p:last-child { margin-bottom: 0; }
+        .note-box strong { color: var(--text-primary); }
+
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); margin-top: 40px; }
+        footer p { color: var(--text-muted); font-size: 0.88em; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        @media (max-width: 768px) {
+            header { padding: 40px 16px 32px; }
+            header h1 { font-size: 2em; }
+            .tools-grid { grid-template-columns: 1fr; }
+            .filter-section { position: relative; top: 0; }
+            .tool-meta-grid { grid-template-columns: 1fr; }
+            .summary-table { font-size: 0.85em; }
+            .summary-table th, .summary-table td { padding: 8px; }
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .tools-grid { animation: fadeInUp 0.5s ease-out; }
+    </style>
+</head>
+<body>
+<div class="bg-pattern"></div>
+<div class="container">
+<header>
+<div class="badge">Continuously Updated</div>
+<h1>HCC Recurrence Prediction Tools</h1>
+<p>A curated resource library of hepatocellular carcinoma recurrence prediction models, organized by the five categories described in Chapter 5 of the review.</p>
+<div class="stats-bar">
+<div class="stat-item"><span class="stat-number">27</span><span class="stat-label">Prediction Tools</span></div>
+<div class="stat-item"><span class="stat-number">5</span><span class="stat-label">Categories</span></div>
+<div class="stat-item"><span class="stat-number">2008</span><span class="stat-label">Earliest Model</span></div>
+</div>
+</header>
+<div class="filter-section">
+<span class="filter-label">Filter:</span>
+<span class="filter-tag active" onclick="filterTools('all')">All</span>
+<span class="filter-tag" onclick="filterTools('clinical')">Clinical-Pathological</span>
+<span class="filter-tag" onclick="filterTools('bulk')">Bulk Molecular</span>
+<span class="filter-tag" onclick="filterTools('ai')">AI &amp; Multimodal</span>
+<span class="filter-tag" onclick="filterTools('spatial')">Single-cell &amp; Spatial</span>
+<span class="filter-tag" onclick="filterTools('liquid')">Liquid Biopsy</span>
+</div>
+<!-- Category 1: Clinical-Pathological -->
+<h2 class="section-title" id="clinical"><span class="icon">📋</span>1. Clinical-Pathological Models<span class="line"></span></h2>
+<div class="tools-grid">
+<div class="tool-card" data-category="clinical">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">BCLC Staging</div>
+<div class="tool-badges"><span class="tool-type type-staging">Staging</span></div>
+</div>
+</div>
+<div class="tool-description">Barcelona Clinic Liver Cancer staging system integrating tumor burden, liver function and performance status for disease stratification and treatment guidance.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Clinical &amp; laboratory</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Overall prognosis / staging</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Tumor burden + liver function + PS</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Lancet Oncol 2003</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link" href="https://www.mdcalc.com/calc/3825/barcelona-clinic-liver-cancer-bclc-staging-classification-treatment-guidelines" target="_blank">Access Tool →</a>
+<a class="tool-link reference" href="https://pubmed.ncbi.nlm.nih.gov/10518312/" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="clinical">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">AJCC / TNM Staging</div>
+<div class="tool-badges"><span class="tool-type type-staging">Staging</span></div>
+</div>
+</div>
+<div class="tool-description">Tumor-node-metastasis staging based on tumor size, vascular invasion and distant metastasis. Provides anatomical disease stratification.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Pathological &amp; imaging</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Overall prognosis / staging</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Tumor size + vascular invasion + metastasis</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">CA Cancer J Clin</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.3322/caac.21388" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="clinical">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Clinical Resection Recurrence Nomogram</div>
+                        <div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+                    </div>
+                </div>
+                <div class="tool-description">Postoperative recurrence nomogram integrating AFP, MVI, tumor size and tumor number. Demonstrated superior performance over TNM and BCLC staging.</div>
+                <div class="tool-meta-grid">
+                    <div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Clinical-pathological</span></div>
+                    <div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Post-resection recurrence</span></div>
+                    <div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">609-patient clinical nomogram</span></div>
+                    <div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">JAMA Surgery 2015</span></div>
+                </div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1001/jamasurg.2015.4257" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="clinical">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">MORAL Score</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">Model of Recurrence After Liver Transplantation. Combines pre-transplant AFP, tumor burden and post-transplant pathology to assess recurrence risk following LT.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Pre/post-LT clinical-pathological</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">LT recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Post-LT recurrence risk score</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Ann Surg 2015</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1097/SLA.0000000000001966" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="clinical">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">RETREAT Score</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">Risk Estimation of Tumor Recurrence After Transplant. Integrates pre-transplant AFP, tumor burden and post-transplant pathology; one of the most extensively validated LT recurrence tools.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Pre/post-LT clinical-pathological</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">LT recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">AFP + tumor burden + pathology</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">JAMA Oncol 2017</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1001/jamaoncol.2016.5116" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="clinical">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">CNLC-Integrated Nomogram</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">Nomogram combining China Liver Cancer (CNLC) staging with clinical-pathological variables to improve prediction of recurrence-free survival after hepatic resection.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">CNLC + clinical variables</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Post-resection RFS</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Integrates CNLC staging</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Front Oncol 2021</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.3389/fonc.2021.755920" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="clinical">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Multi-Treatment RFS Model</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">A unified RFS assessment framework covering hepatic resection, liver transplantation and local ablation as curative-intent treatments.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Clinical-pathological</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">RFS after curative therapy</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Covers resection, LT, ablation</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Front Oncol</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.3389/fonc.2022.946531" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="clinical">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">ANT Score</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">Early recurrence prediction score integrating nutritional status, inflammation markers and tumor burden for risk stratification after HCC resection.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Nutrition + inflammation + tumor</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Early recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Preoperative stratification score</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">J Hepatocell Carcinoma 2022</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link" href="https://doctoryu.shinyapps.io/ANT-Score-Calculator/" target="_blank">Access Tool →</a>
+<a class="tool-link reference" href="https://doi.org/10.2147/JHC.S556733" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="clinical">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">IINBS Nomogram</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">Inflammation-Immune-Nutrition nomogram incorporating NLR, PNI, AFP, vascular invasion and satellite nodules for postoperative recurrence prediction.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">NLR, PNI, AFP, MVI, satellites</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Postoperative recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Inflammation-immune-nutrition indices</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">J Hepatocell Carcinoma 2023</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link" href="https://zhangxiaosong520.shinyapps.io/Prediction_model/" target="_blank">Access Tool →</a>
+<a class="tool-link reference" href="https://doi.org/10.2147/JHC.S572863" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="clinical">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">POLAR-HCC</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">Predicts late recurrence in patients who have remained recurrence-free for 2 years after surgery, distinguishing late de novo recurrence from early metastatic relapse.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">7 clinical variables</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Late recurrence (&gt;2 yr)</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Predicts post-2-year recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Ann Surg Oncol 2025</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link" href="https://online--calculator.shinyapps.io/POLAR-HCC/" target="_blank">Access Tool →</a>
+<a class="tool-link reference" href="https://doi.org/10.1245/s10434-025-18213-9" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="clinical">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">AFP Dynamic Model</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">Time-dependent Cox model that updates recurrence-free survival probability during follow-up by combining 6- and 12-month AFP changes with tumor burden.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Serial AFP + tumor burden</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Dynamic RFS update</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Time-dependent Cox model</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Ann Surg Oncol 2025</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link" href="https://nm49jf-miho-akabane.shinyapps.io/AFPHCC/" target="_blank">Access Tool →</a>
+<a class="tool-link reference" href="https://doi.org/10.1245/s10434-025-17303-y" target="_blank">Reference →</a>
+</div>
+</div>
+</div>
+<!-- Category 2: Bulk Molecular -->
+<h2 class="section-title" id="bulk"><span class="icon">🧬</span>2. Bulk Molecular Signature Models<span class="line"></span></h2>
+<div class="tools-grid">
+<div class="tool-card" data-category="bulk">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Adjacent-Liver Field-Effect Signature</div>
+<div class="tool-badges"><span class="tool-type type-bulk">Bulk</span></div>
+</div>
+</div>
+<div class="tool-description">Gene expression signature from adjacent non-tumorous liver tissue predicting late recurrence. Reflects inflammation, fibrosis and field-effect carcinogenesis in the remnant liver.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Adjacent liver transcriptome</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Late recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Field-effect carcinogenesis signal</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">NEJM 2008</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1056/NEJMoa0804525" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="bulk">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Tumor Metastasis Gene Signature</div>
+<div class="tool-badges"><span class="tool-type type-bulk">Bulk</span></div>
+</div>
+</div>
+<div class="tool-description">Tumor tissue metastasis-associated gene expression signature validated in two independent cohorts to predict early recurrence after curative resection.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Tumor transcriptome</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Early recurrence (&lt;2 yr)</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Metastasis-associated genes</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Cancer Res 2010</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1158/0008-5472.CAN-10-2607" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="bulk">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Tumor-Adjacent Liver Integrated Model</div>
+<div class="tool-badges"><span class="tool-type type-bulk">Bulk</span></div>
+</div>
+</div>
+<div class="tool-description">Integrates tumor tissue, adjacent cirrhotic tissue and clinical-pathological data. Demonstrates that both tumor proliferation features and adjacent-liver expression signatures independently predict recurrence.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Tumor + adjacent liver + clinical</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Recurrence risk</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Dual-tissue integration</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Gastroenterology 2011</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1053/j.gastro.2011.02.006" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="bulk">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">HCC Immune Class</div>
+<div class="tool-badges"><span class="tool-type type-bulk">Bulk</span></div>
+</div>
+</div>
+<div class="tool-description">Transcriptomic classification identifying ~25% of HCCs as Immune Class, subdivided into immune-active and immune-exhausted subtypes. Immune-exhausted tumors show earlier recurrence after resection.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Bulk transcriptome</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Recurrence risk stratification</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Immune-active vs exhausted subtypes</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Cancer Cell 2017</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1053/j.gastro.2017.06.007" target="_blank">Reference →</a>
+</div>
+</div>
+</div>
+<!-- Category 3: AI & Multimodal -->
+<h2 class="section-title" id="ai"><span class="icon">🤖</span>3. AI &amp; Multimodal Models<span class="line"></span></h2>
+<div class="tools-grid">
+<div class="tool-card" data-category="ai">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">MLP Recurrence Predictor</div>
+<div class="tool-badges"><span class="tool-type type-ai">AI</span></div>
+</div>
+</div>
+<div class="tool-description">Machine learning predictor using routine clinical variables and multilayer perceptron (MLP) to predict recurrence after hepatic resection, with SHAP-based variable importance.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Routine clinical variables</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Post-resection recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">MLP + SHAP explanation</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Heliyon 2023</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link" href="https://livercancerrecurrence-jpbrmbtbsfn4jojos4anta.streamlit.app/" target="_blank">Access Tool →</a>
+<a class="tool-link reference" href="https://doi.org/10.1016/j.heliyon.2023.e22458" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="ai">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">CECT Texture Radiomics</div>
+<div class="tool-badges"><span class="tool-type type-ai">AI</span></div>
+</div>
+</div>
+<div class="tool-description">Contrast-enhanced CT texture analysis to identify invasive phenotypes associated with microvascular invasion and postoperative recurrence.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">CECT texture features</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">MVI &amp; recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Tumor + peritumor texture</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Hepatology 2015</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1002/hep.27877" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="ai">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Hepatobiliary MRI Radiomics</div>
+<div class="tool-badges"><span class="tool-type type-ai">AI</span></div>
+</div>
+</div>
+<div class="tool-description">Gadoxetic acid-enhanced MRI radiomics model for predicting early recurrence after HCC resection, outperforming conventional clinical-pathological models.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Gd-EOB-MRI radiomics</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Early recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Hepatobiliary phase texture</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Clin Cancer Res</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1158/1078-0432.CCR-18-2861" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="ai">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Multiphase CT Radiomics</div>
+<div class="tool-badges"><span class="tool-type type-ai">AI</span></div>
+</div>
+</div>
+<div class="tool-description">Multiphase CT radiomics combining intra-tumoral and peritumoral features to build preoperative and postoperative recurrence models, externally validated across three centers.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Multiphase CT (tumor + peritumor)</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Pre- &amp; post-op recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Pre/post-operative dual models</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Radiology 2020</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link" href="https://earlystagehccradiomicspost.shinyapps.io/dynnomapp/" target="_blank">Access Tool →</a>
+<a class="tool-link reference" href="https://pubmed.ncbi.nlm.nih.gov/31934830/" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="ai">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">HCC-SurvNet</div>
+<div class="tool-badges"><span class="tool-type type-ai">AI</span></div>
+</div>
+</div>
+<div class="tool-description">Deep learning model using H&amp;E whole-slide images to predict postoperative recurrence risk, capturing tumor architecture, cell morphology and stromal patterns not quantifiable visually.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">H&amp;E whole-slide images</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Postoperative recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Deep learning on WSI</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Cancers 2021</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link" href="https://github.com/RubinLab/HCCSurvNet" target="_blank">Access Tool →</a>
+<a class="tool-link reference" href="https://doi.org/10.1038/s41598-021-81506-y" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="ai">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Recurr-NET</div>
+<div class="tool-badges"><span class="tool-type type-ai">AI</span></div>
+</div>
+</div>
+<div class="tool-description">Deep learning model combining preoperative triphasic CT and clinical variables to predict recurrence 1–5 years after surgery, outperforming MVI and multiple clinical scores in external validation.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Triphasic CT + clinical</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">1–5 year recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">End-to-end deep learning</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Hepatology 2024</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link" href="https://github.com/HKUMedicineLiverAI/RecurrNet" target="_blank">Access Tool →</a>
+<a class="tool-link reference" href="https://doi.org/10.1097/HEP.0000000000001180" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="ai">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">2.5D DL-MIL</div>
+<div class="tool-badges"><span class="tool-type type-ai">AI</span></div>
+</div>
+</div>
+<div class="tool-description">2.5D deep learning multi-instance learning model using arterial-phase CT slices to predict early recurrence, balancing 3D spatial information with computational efficiency.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Arterial-phase CT</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Early recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">2.5D multi-instance learning</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">J Hepatocell Carcinoma 2023</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.2147/JHC.S541402" target="_blank">Reference →</a>
+</div>
+</div>
+</div>
+<!-- Category 4: Single-cell & Spatial -->
+<h2 class="section-title" id="spatial"><span class="icon">🔬</span>4. Single-cell &amp; Spatial Ecosystem Models<span class="line"></span></h2>
+<div class="tools-grid">
+<div class="tool-card" data-category="spatial">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Single-Cell Recurrence Atlas</div>
+<div class="tool-badges"><span class="tool-type type-spatial">Single-cell</span></div>
+</div>
+</div>
+<div class="tool-description">Single-cell atlas of early recurrent HCC revealing KLRB1+ innate-like CD8+ T cells with low cytotoxicity and clonal expansion, plus impaired dendritic-cell antigen presentation.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">scRNA-seq</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Early recurrence mechanisms</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">KLRB1+ innate-like CD8+ T cells</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Cell 2020</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1016/j.cell.2020.11.041" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="spatial">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Spatial Transcriptomic Recurrence Signature</div>
+<div class="tool-badges"><span class="tool-type type-spatial">Spatial</span></div>
+</div>
+</div>
+<div class="tool-description">Integrative analysis of single-cell, spatial transcriptomic and Bulk transcriptomic data identifying spatial gene signatures associated with rapid recurrence.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">scRNA + spatial + Bulk</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Rapid recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Spatial gene signatures</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">npj Precis Oncol 2024</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1038/s41698-024-00752-1" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card featured" data-category="spatial">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">TIMES Score</div>
+<div class="tool-badges">
+<span class="tool-type type-spatial">Spatial</span>
+<span class="featured-badge">⭐ Nature 2025</span>
+</div>
+</div>
+</div>
+<div class="tool-description">Tumor Immune MicroEnvironment Spatial score. Analyzes spatial distribution of SPON2, ZFP36L2 and other markers at the tumor-invasive margin using multiplex immunohistochemistry and XGBoost.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">mIHC spatial markers</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Early recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">SPON2/ZFP36L2 spatial distribution</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Nature 2025</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link" href="https://sun.times.ustc.edu.cn/" target="_blank">Access Tool →</a>
+<a class="tool-link reference" href="https://doi.org/10.1038/s41586-025-08668-x" target="_blank">Reference →</a>
+</div>
+</div>
+</div>
+<!-- Category 5: Liquid Biopsy -->
+<h2 class="section-title" id="liquid"><span class="icon">🧪</span>5. Liquid Biopsy &amp; Dynamic Monitoring<span class="line"></span></h2>
+<div class="tools-grid">
+<div class="tool-card" data-category="liquid">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Postoperative ctDNA Detection</div>
+<div class="tool-badges"><span class="tool-type type-liquid">Liquid Biopsy</span></div>
+</div>
+</div>
+<div class="tool-description">Detection of circulating tumor DNA after surgery to identify molecular residual disease (MRD) and higher recurrence risk; complementary to AFP monitoring.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Plasma ctDNA</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">MRD / recurrence risk</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Postoperative MRD detection</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Front Oncol</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.3389/fonc.2022.834992" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="liquid">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Tumor-Informed ctDNA MRD</div>
+<div class="tool-badges"><span class="tool-type type-liquid">Liquid Biopsy</span></div>
+</div>
+</div>
+<div class="tool-description">Patient-specific ctDNA monitoring panel designed from tumor whole-exome sequencing, enabling sensitive MRD detection during the postoperative window and follow-up.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Tumor-informed ctDNA panel</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Dynamic recurrence monitoring</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Patient-specific WES-based panel</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">JCO Precis Oncol</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1200/PO-24-00934" target="_blank">Reference →</a>
+</div>
+</div>
+</div>
+<!-- Summary Table -->
+<div class="summary-table-section">
+<h2 class="section-title" id="summary"><span class="icon">📊</span>Summary Comparison<span class="line"></span></h2>
+<table class="summary-table">
+<thead>
+<tr>
+<th>Category</th>
+<th>Representative Tools</th>
+<th>Data Layer</th>
+<th>Primary Endpoint</th>
+<th>Key Strength</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clinical-Pathological</td>
+<td>BCLC, AJCC/TNM, Clinical Resection Recurrence Nomogram, MORAL, RETREAT, POLAR-HCC, AFP dynamic</td>
+<td>Clinical, lab, pathology</td>
+<td>Recurrence / RFS / OS</td>
+<td>Easy to obtain, interpretable</td>
+</tr>
+<tr>
+<td>Bulk Molecular</td>
+<td>Adjacent-Liver Field-Effect Signature, Tumor Metastasis Gene Signature, Tumor-Adjacent Liver Integrated Model, HCC Immune Class</td>
+<td>Tumor/adjacent transcriptome</td>
+<td>Early/late recurrence</td>
+<td>Reflects tumor biology &amp; field effect</td>
+</tr>
+<tr>
+<td>AI &amp; Multimodal</td>
+<td>MLP, CECT Texture Radiomics, Hepatobiliary MRI Radiomics, Multiphase CT Radiomics, HCC-SurvNet, Recurr-NET, 2.5D DL-MIL</td>
+<td>Imaging, pathology, clinical</td>
+<td>Early recurrence / MVI</td>
+<td>High-dimensional feature learning</td>
+</tr>
+<tr>
+<td>Single-cell &amp; Spatial</td>
+<td>Single-Cell Recurrence Atlas, Spatial Transcriptomic Recurrence Signature, TIMES</td>
+<td>scRNA-seq, spatial omics, mIHC</td>
+<td>Early/rapid recurrence</td>
+<td>Cellular &amp; spatial resolution</td>
+</tr>
+<tr>
+<td>Liquid Biopsy</td>
+<td>ctDNA MRD, tumor-informed ctDNA</td>
+<td>Plasma ctDNA</td>
+<td>MRD / dynamic recurrence</td>
+<td>Non-invasive longitudinal monitoring</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note-box">
+<h3>📌 How to use this resource</h3>
+<p><strong>Clinical-pathological models</strong> are best suited for initial risk stratification because they require only routine clinical and pathological data.</p>
+<p><strong>Bulk molecular signatures</strong> add biological insight by distinguishing early metastatic recurrence from late de novo recurrence.</p>
+<p><strong>AI and multimodal models</strong> leverage imaging or pathology to capture non-linear patterns, often achieving the highest cross-sectional predictive accuracy.</p>
+<p><strong>Single-cell/spatial models</strong> currently serve more as discovery platforms, with TIMES representing an early translational example.</p>
+<p><strong>Liquid biopsy</strong> shifts prediction from a single preoperative probability to longitudinal dynamic monitoring of molecular residual disease.</p>
+</div>
+<footer>
+<p>Curated based on Chapter 5 of the review: 肝细胞癌复发的免疫特征及预测模型</p>
+<p style="margin-top: 8px; font-size: 0.8em;">Last updated: 2026-07-30</p>
+</footer>
+</div>
+<script>
+        function filterTools(category) {
+            const cards = document.querySelectorAll('.tool-card');
+            const tags = document.querySelectorAll('.filter-tag');
+            
+            tags.forEach(tag => tag.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeInUp 0.4s ease-out';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Hide empty section titles when filtering
+            const sections = document.querySelectorAll('.section-title');
+            sections.forEach(section => {
+                const grid = section.nextElementSibling;
+                if (grid && grid.classList.contains('tools-grid')) {
+                    const visibleCards = grid.querySelectorAll('.tool-card:not([style*="display: none"])');
+                    if (visibleCards.length === 0 && category !== 'all') {
+                        section.style.display = 'none';
+                        grid.style.display = 'none';
+                    } else {
+                        section.style.display = 'flex';
+                        grid.style.display = 'grid';
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
