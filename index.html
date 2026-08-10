@@ -231,8 +231,8 @@
 <span class="filter-tag active" onclick="filterTools('all')">All</span>
 <span class="filter-tag" onclick="filterTools('clinical')">Clinical-Pathological</span>
 <span class="filter-tag" onclick="filterTools('bulk')">Bulk Molecular</span>
-<span class="filter-tag" onclick="filterTools('ai')">AI &amp; Multimodal</span>
 <span class="filter-tag" onclick="filterTools('spatial')">Single-cell &amp; Spatial</span>
+<span class="filter-tag" onclick="filterTools('ai')">AI &amp; Multimodal</span>
 <span class="filter-tag" onclick="filterTools('liquid')">Liquid Biopsy</span>
 </div>
 <!-- Category 1: Clinical-Pathological -->
@@ -278,19 +278,19 @@
 <div class="tool-card" data-category="clinical">
 <div class="tool-header">
 <div style="flex:1;">
-<div class="tool-name">Clinical Resection Recurrence Nomogram</div>
-                        <div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
-                    </div>
-                </div>
-                <div class="tool-description">Postoperative recurrence nomogram integrating AFP, MVI, tumor size and tumor number. Demonstrated superior performance over TNM and BCLC staging.</div>
-                <div class="tool-meta-grid">
-                    <div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Clinical-pathological</span></div>
-                    <div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Post-resection recurrence</span></div>
-                    <div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">609-patient clinical nomogram</span></div>
-                    <div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">JAMA Surgery 2015</span></div>
-                </div>
+<div class="tool-name">Laparoscopic Hepatectomy Recurrence Nomogram</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">Postoperative recurrence nomogram specifically for HCC patients undergoing laparoscopic hepatectomy (LH), integrating HBsAg, tumor number, tumor thrombus, cancer cell differentiation and MVI. Outperformed 8th AJCC TNM and BCLC staging (C-index 0.786 vs 0.698 vs 0.632).</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">Clinical-pathological</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Post-LH recurrence (1–3 yr RFS)</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">432-patient LH nomogram</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Cancer Commun 2019</span></div>
+</div>
 <div class="tool-links">
-<a class="tool-link reference" href="https://doi.org/10.1001/jamasurg.2015.4257" target="_blank">Reference →</a>
+<a class="tool-link reference" href="https://doi.org/10.1186/s40880-019-0404-6" target="_blank">Reference →</a>
 </div>
 </div>
 <div class="tool-card" data-category="clinical">
@@ -518,8 +518,70 @@
 </div>
 </div>
 </div>
-<!-- Category 3: AI & Multimodal -->
-<h2 class="section-title" id="ai"><span class="icon">🤖</span>3. AI &amp; Multimodal Models<span class="line"></span></h2>
+<!-- Category 3: Single-cell & Spatial -->
+<h2 class="section-title" id="spatial"><span class="icon">🔬</span>3. Single-cell &amp; Spatial Ecosystem Models<span class="line"></span></h2>
+<div class="tools-grid">
+<div class="tool-card" data-category="spatial">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Single-Cell Recurrence Atlas</div>
+<div class="tool-badges"><span class="tool-type type-spatial">Single-cell</span></div>
+</div>
+</div>
+<div class="tool-description">Single-cell atlas of early recurrent HCC revealing KLRB1+ innate-like CD8+ T cells with low cytotoxicity and clonal expansion, plus impaired dendritic-cell antigen presentation.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">scRNA-seq</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Early recurrence mechanisms</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">KLRB1+ innate-like CD8+ T cells</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Cell 2020</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1016/j.cell.2020.11.041" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="spatial">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Spatial Transcriptomic Recurrence Signature</div>
+<div class="tool-badges"><span class="tool-type type-spatial">Spatial</span></div>
+</div>
+</div>
+<div class="tool-description">Integrative analysis of single-cell, spatial transcriptomic and Bulk transcriptomic data identifying spatial gene signatures associated with rapid recurrence.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">scRNA + spatial + Bulk</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Rapid recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Spatial gene signatures</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">npj Precis Oncol 2024</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1038/s41698-024-00752-1" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card featured" data-category="spatial">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">TIMES Score</div>
+<div class="tool-badges">
+<span class="tool-type type-spatial">Spatial</span>
+<span class="featured-badge">⭐ Nature 2025</span>
+</div>
+</div>
+</div>
+<div class="tool-description">Tumor Immune MicroEnvironment Spatial score. Analyzes spatial distribution of SPON2, ZFP36L2 and other markers at the tumor-invasive margin using multiplex immunohistochemistry and XGBoost.</div>
+<div class="tool-meta-grid">
+<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">mIHC spatial markers</span></div>
+<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Early recurrence</span></div>
+<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">SPON2/ZFP36L2 spatial distribution</span></div>
+<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Nature 2025</span></div>
+</div>
+<div class="tool-links">
+<a class="tool-link" href="https://sun.times.ustc.edu.cn/" target="_blank">Access Tool →</a>
+<a class="tool-link reference" href="https://doi.org/10.1038/s41586-025-08668-x" target="_blank">Reference →</a>
+</div>
+</div>
+</div>
+<!-- Category 4: AI & Multimodal -->
+<h2 class="section-title" id="ai"><span class="icon">🤖</span>4. AI &amp; Multimodal Models<span class="line"></span></h2>
 <div class="tools-grid">
 <div class="tool-card" data-category="ai">
 <div class="tool-header">
@@ -652,68 +714,6 @@
 </div>
 </div>
 </div>
-<!-- Category 4: Single-cell & Spatial -->
-<h2 class="section-title" id="spatial"><span class="icon">🔬</span>4. Single-cell &amp; Spatial Ecosystem Models<span class="line"></span></h2>
-<div class="tools-grid">
-<div class="tool-card" data-category="spatial">
-<div class="tool-header">
-<div style="flex:1;">
-<div class="tool-name">Single-Cell Recurrence Atlas</div>
-<div class="tool-badges"><span class="tool-type type-spatial">Single-cell</span></div>
-</div>
-</div>
-<div class="tool-description">Single-cell atlas of early recurrent HCC revealing KLRB1+ innate-like CD8+ T cells with low cytotoxicity and clonal expansion, plus impaired dendritic-cell antigen presentation.</div>
-<div class="tool-meta-grid">
-<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">scRNA-seq</span></div>
-<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Early recurrence mechanisms</span></div>
-<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">KLRB1+ innate-like CD8+ T cells</span></div>
-<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Cell 2020</span></div>
-</div>
-<div class="tool-links">
-<a class="tool-link reference" href="https://doi.org/10.1016/j.cell.2020.11.041" target="_blank">Reference →</a>
-</div>
-</div>
-<div class="tool-card" data-category="spatial">
-<div class="tool-header">
-<div style="flex:1;">
-<div class="tool-name">Spatial Transcriptomic Recurrence Signature</div>
-<div class="tool-badges"><span class="tool-type type-spatial">Spatial</span></div>
-</div>
-</div>
-<div class="tool-description">Integrative analysis of single-cell, spatial transcriptomic and Bulk transcriptomic data identifying spatial gene signatures associated with rapid recurrence.</div>
-<div class="tool-meta-grid">
-<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">scRNA + spatial + Bulk</span></div>
-<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Rapid recurrence</span></div>
-<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">Spatial gene signatures</span></div>
-<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">npj Precis Oncol 2024</span></div>
-</div>
-<div class="tool-links">
-<a class="tool-link reference" href="https://doi.org/10.1038/s41698-024-00752-1" target="_blank">Reference →</a>
-</div>
-</div>
-<div class="tool-card featured" data-category="spatial">
-<div class="tool-header">
-<div style="flex:1;">
-<div class="tool-name">TIMES Score</div>
-<div class="tool-badges">
-<span class="tool-type type-spatial">Spatial</span>
-<span class="featured-badge">⭐ Nature 2025</span>
-</div>
-</div>
-</div>
-<div class="tool-description">Tumor Immune MicroEnvironment Spatial score. Analyzes spatial distribution of SPON2, ZFP36L2 and other markers at the tumor-invasive margin using multiplex immunohistochemistry and XGBoost.</div>
-<div class="tool-meta-grid">
-<div class="meta-item"><span class="meta-label">Data</span><span class="meta-value">mIHC spatial markers</span></div>
-<div class="meta-item"><span class="meta-label">Target</span><span class="meta-value">Early recurrence</span></div>
-<div class="meta-item"><span class="meta-label">Key Feature</span><span class="meta-value">SPON2/ZFP36L2 spatial distribution</span></div>
-<div class="meta-item"><span class="meta-label">Reference</span><span class="meta-value">Nature 2025</span></div>
-</div>
-<div class="tool-links">
-<a class="tool-link" href="https://sun.times.ustc.edu.cn/" target="_blank">Access Tool →</a>
-<a class="tool-link reference" href="https://doi.org/10.1038/s41586-025-08668-x" target="_blank">Reference →</a>
-</div>
-</div>
-</div>
 <!-- Category 5: Liquid Biopsy -->
 <h2 class="section-title" id="liquid"><span class="icon">🧪</span>5. Liquid Biopsy &amp; Dynamic Monitoring<span class="line"></span></h2>
 <div class="tools-grid">
@@ -770,7 +770,7 @@
 <tbody>
 <tr>
 <td>Clinical-Pathological</td>
-<td>BCLC, AJCC/TNM, Clinical Resection Recurrence Nomogram, MORAL, RETREAT, POLAR-HCC, AFP dynamic</td>
+<td>BCLC, AJCC/TNM, LH Recurrence Nomogram, MORAL, RETREAT, POLAR-HCC, AFP dynamic</td>
 <td>Clinical, lab, pathology</td>
 <td>Recurrence / RFS / OS</td>
 <td>Easy to obtain, interpretable</td>
@@ -783,18 +783,18 @@
 <td>Reflects tumor biology &amp; field effect</td>
 </tr>
 <tr>
-<td>AI &amp; Multimodal</td>
-<td>MLP, CECT Texture Radiomics, Hepatobiliary MRI Radiomics, Multiphase CT Radiomics, HCC-SurvNet, Recurr-NET, 2.5D DL-MIL</td>
-<td>Imaging, pathology, clinical</td>
-<td>Early recurrence / MVI</td>
-<td>High-dimensional feature learning</td>
-</tr>
-<tr>
 <td>Single-cell &amp; Spatial</td>
 <td>Single-Cell Recurrence Atlas, Spatial Transcriptomic Recurrence Signature, TIMES</td>
 <td>scRNA-seq, spatial omics, mIHC</td>
 <td>Early/rapid recurrence</td>
 <td>Cellular &amp; spatial resolution</td>
+</tr>
+<tr>
+<td>AI &amp; Multimodal</td>
+<td>MLP, CECT Texture Radiomics, Hepatobiliary MRI Radiomics, Multiphase CT Radiomics, HCC-SurvNet, Recurr-NET, 2.5D DL-MIL</td>
+<td>Imaging, pathology, clinical</td>
+<td>Early recurrence / MVI</td>
+<td>High-dimensional feature learning</td>
 </tr>
 <tr>
 <td>Liquid Biopsy</td>
