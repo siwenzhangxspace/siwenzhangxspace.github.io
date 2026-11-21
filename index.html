@@ -88,12 +88,13 @@
         .filter-label { font-weight: 600; color: var(--text-primary); font-size: 0.9em; }
         .filter-tag {
             padding: 7px 16px; border: 1px solid var(--border-color); border-radius: 8px;
-            cursor: pointer; transition: all 0.3s ease; font-size: 0.85em;
+            cursor: pointer; transition: all 0.3s ease; font-family: inherit; font-size: 0.85em;
             color: var(--text-secondary); background: transparent; font-weight: 500;
         }
         .filter-tag:hover { border-color: var(--accent-blue); color: var(--accent-blue); background: rgba(96,165,250,0.05); }
         .filter-tag.active { border-color: var(--accent-blue); background: linear-gradient(135deg, rgba(96,165,250,0.1), rgba(167,139,250,0.08)); color: var(--text-primary); box-shadow: 0 0 8px rgba(96,165,250,0.1); }
 
+        [hidden] { display: none !important; }
         .section-title {
             display: flex; align-items: center; gap: 12px;
             font-size: 1.5em; font-weight: 600; margin: 48px 0 20px;
@@ -193,6 +194,7 @@
         .note-box strong { color: var(--text-primary); }
 
         footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border-color); margin-top: 40px; }
+        footer .history-link { color: var(--accent-blue); }
         footer p { color: var(--text-muted); font-size: 0.88em; }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -206,6 +208,7 @@
             .tools-grid { grid-template-columns: 1fr; }
             .filter-section { position: relative; top: 0; }
             .tool-meta-grid { grid-template-columns: 1fr; }
+            .summary-table-section { overflow-x: auto; }
             .summary-table { font-size: 0.85em; }
             .summary-table th, .summary-table td { padding: 8px; }
         }
@@ -231,23 +234,24 @@
 <div class="bg-pattern"></div>
 <div class="container">
 <header>
-<div class="badge">Continuously Updated</div>
+<div class="badge">Curated by Siwen Zhang</div>
 <h1>HCC Recurrence Risk Assessment and Monitoring Resource Portal</h1>
-<p>A curated companion resource of representative studies, prediction models, and tools for HCC recurrence risk assessment and molecular residual disease monitoring</p>
+<p>Studies, tools and datasets on recurrence after curative resection of hepatocellular carcinoma (HCC). Transplant and mixed-treatment models are grouped separately for comparison.</p>
 <div class="stats-bar">
-<div class="stat-item"><span class="stat-number">27</span><span class="stat-label">Resources</span></div>
-<div class="stat-item"><span class="stat-number">5</span><span class="stat-label">Categories</span></div>
+<div class="stat-item"><span class="stat-number">29</span><span class="stat-label">Resources</span></div>
+<div class="stat-item"><span class="stat-number">6</span><span class="stat-label">Categories</span></div>
 <div class="stat-item"><span class="stat-number">3</span><span class="stat-label">Evaluation Dimensions</span></div>
 </div>
 <div class="framework-note">Resources are interpreted across three complementary dimensions: <strong>biological target</strong>, <strong>clinical timing</strong>, and <strong>evidence maturity</strong>.</div></header>
 <div class="filter-section">
 <span class="filter-label">Filter:</span>
-<span class="filter-tag active" onclick="filterTools('all')">All</span>
-<span class="filter-tag" onclick="filterTools('clinical')">Clinical-Pathological</span>
-<span class="filter-tag" onclick="filterTools('bulk')">Bulk Molecular</span>
-<span class="filter-tag" onclick="filterTools('spatial')">Single-cell &amp; Spatial</span>
-<span class="filter-tag" onclick="filterTools('ai')">AI &amp; Multimodal</span>
-<span class="filter-tag" onclick="filterTools('liquid')">Liquid Biopsy</span>
+<button type="button" class="filter-tag active" data-filter="all" aria-pressed="true">All</button>
+<button type="button" class="filter-tag" data-filter="clinical" aria-pressed="false">Clinical-Pathological</button>
+<button type="button" class="filter-tag" data-filter="bulk" aria-pressed="false">Bulk Molecular</button>
+<button type="button" class="filter-tag" data-filter="spatial" aria-pressed="false">Single-cell &amp; Spatial</button>
+<button type="button" class="filter-tag" data-filter="ai" aria-pressed="false">AI &amp; Multimodal</button>
+<button type="button" class="filter-tag" data-filter="liquid" aria-pressed="false">Liquid Biopsy</button>
+<button type="button" class="filter-tag" data-filter="context" aria-pressed="false">Other Treatment Settings</button>
 </div>
 <!-- Category 1: Clinical-Pathological -->
 <h2 class="section-title" id="clinical"><span class="icon">📋</span>1. Clinical-Pathological Models<span class="line"></span></h2>
@@ -295,32 +299,6 @@
 <div class="tool-card" data-category="clinical">
 <div class="tool-header">
 <div style="flex:1;">
-<div class="tool-name">MORAL Score</div>
-<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
-</div>
-</div>
-<div class="tool-description">Model of Recurrence After Liver Transplantation. Combines pre-transplant AFP, tumor burden and post-transplant pathology to assess recurrence risk following LT.</div>
-<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Post-transplant tumor biology and recurrence propensity</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Pre- and post-liver transplantation</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">AFP, NLR, tumor burden, explant pathology</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Post-LT recurrence</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Model development</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">Prospective cohort, n=339</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">c-statistic 0.82 (pre-MORAL), 0.87 (post-MORAL), 0.91 (combo-MORAL)</span></div></div>
-<div class="tool-links">
-<a class="tool-link reference" href="https://doi.org/10.1097/SLA.0000000000001966" target="_blank">Reference →</a>
-</div>
-</div>
-<div class="tool-card" data-category="clinical">
-<div class="tool-header">
-<div style="flex:1;">
-<div class="tool-name">RETREAT Score</div>
-<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
-</div>
-</div>
-<div class="tool-description">Risk Estimation of Tumor Recurrence After Transplant. Integrates pre-transplant AFP, tumor burden and post-transplant pathology; one of the most extensively validated LT recurrence tools.</div>
-<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Residual recurrence risk after liver transplantation</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">At liver transplantation / post-explant</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">AFP + MVI + viable tumor burden</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Post-LT recurrence</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">External validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">Development n=721 across 3 centers; external validation n=340 at an independent center</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">C-statistic 0.77 in development and 0.82 in external validation</span></div></div>
-<div class="tool-links">
-<a class="tool-link reference" href="https://doi.org/10.1001/jamaoncol.2016.5116" target="_blank">Reference →</a>
-</div>
-</div>
-<div class="tool-card" data-category="clinical">
-<div class="tool-header">
-<div style="flex:1;">
 <div class="tool-name">CNLC-Integrated Nomogram</div>
 <div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
 </div>
@@ -329,19 +307,6 @@
 <div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Tumor stage + clinicopathological recurrence risk</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Postoperative baseline</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">CNLC stage + clinical-pathological variables</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Post-resection RFS</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Model development + validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">Retrospective development and validation cohorts</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Improved individualized RFS prediction compared with staging alone</span></div></div>
 <div class="tool-links">
 <a class="tool-link reference" href="https://doi.org/10.3389/fonc.2021.755920" target="_blank">Reference →</a>
-</div>
-</div>
-<div class="tool-card" data-category="clinical">
-<div class="tool-header">
-<div style="flex:1;">
-<div class="tool-name">Multi-Treatment RFS Model</div>
-<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
-</div>
-</div>
-<div class="tool-description">A unified RFS assessment framework covering hepatic resection, liver transplantation and local ablation as curative-intent treatments.</div>
-<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Baseline recurrence risk across curative-intent treatment settings</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Peri-treatment baseline</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Clinical-pathological variables</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">RFS after resection, liver transplantation, or local ablation</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Model development + validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">Curative-treatment cohort spanning multiple modalities</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Nomogram developed for recurrence-free and overall survival assessment</span></div></div>
-<div class="tool-links">
-<a class="tool-link reference" href="https://doi.org/10.3389/fonc.2022.946531" target="_blank">Reference →</a>
 </div>
 </div>
 <div class="tool-card" data-category="clinical">
@@ -379,8 +344,8 @@
 <div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
 </div>
 </div>
-<div class="tool-description">Predicts late recurrence in patients who have remained recurrence-free for 2 years after surgery, distinguishing late de novo recurrence from early metastatic relapse.</div>
-<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Late-recurrence risk after remaining recurrence-free for 2 years</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Conditional assessment at 2 years after hepatectomy</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Seven clinical-pathological variables</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Late recurrence (&gt;2 years)</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Multicenter validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">849 patients from 10 centers; development/validation split 2:1</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Specifically models late recurrence rather than pooling early and late events</span></div></div>
+<div class="tool-description">Estimates the risk of subsequent recurrence in patients who remain recurrence-free two years after hepatectomy.</div>
+<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Late-recurrence risk after remaining recurrence-free for 2 years</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Conditional assessment at 2 years after hepatectomy</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Seven clinical-pathological variables</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Late recurrence (&gt;2 years)</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Multicenter development with split-sample validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">849 patients from 10 centers, randomly allocated 2:1 to development and validation sets</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">The area under the ROC curve was 0.660 in the development set and 0.626 in the held-out validation set.</span></div></div>
 <div class="tool-links">
 <a class="tool-link" href="https://online--calculator.shinyapps.io/POLAR-HCC/" target="_blank">Access Tool →</a>
 <a class="tool-link reference" href="https://doi.org/10.1245/s10434-025-18213-9" target="_blank">Reference →</a>
@@ -400,6 +365,21 @@
 <a class="tool-link reference" href="https://doi.org/10.1245/s10434-025-17303-y" target="_blank">Reference →</a>
 </div>
 </div>
+<div class="tool-card" data-category="clinical">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">ERASL-pre and ERASL-post</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">The ERASL models estimate the risk of early recurrence after curative resection. The postoperative model adds histologic microvascular invasion to the preoperative variables.</div>
+<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Tumor burden, tumor biology and liver function</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Before resection and after pathology becomes available</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Sex, tumor size and number, alpha-fetoprotein, albumin–bilirubin grade, and microvascular invasion in ERASL-post</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Early recurrence within two years of resection</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Multicenter derivation and independent external validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">3,903 resection patients from six centers in the original study. Subsequent independent validation included Dutch and Japanese cohorts.</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">External C statistics for the preoperative and postoperative models were 0.57 and 0.62 in the Netherlands, and 0.69 and 0.70 in Japan.</span></div></div>
+<div class="tool-links">
+<a class="tool-link" href="https://jscalc.io/calc/Fu3bREKIInObXCtj" target="_blank" rel="noopener">ERASL calculator →</a>
+<a class="tool-link reference" href="https://doi.org/10.1016/j.jhep.2018.08.027" target="_blank" rel="noopener">Development study →</a>
+<a class="tool-link reference" href="https://doi.org/10.1245/s10434-021-10235-3" target="_blank" rel="noopener">Independent validation →</a>
+</div>
+</div>
 </div>
 <!-- Category 2: Bulk Molecular -->
 <h2 class="section-title" id="bulk"><span class="icon">🧬</span>2. Bulk Molecular Signature Models<span class="line"></span></h2>
@@ -414,6 +394,7 @@
 <div class="tool-description">Gene expression signature from adjacent non-tumorous liver tissue predicting late recurrence. Reflects inflammation, fibrosis and field-effect carcinogenesis in the remnant liver.</div>
 <div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Background-liver inflammation, fibrosis, and carcinogenic field effect</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">At resection / postoperative baseline</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Adjacent non-tumorous liver transcriptome</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Predominantly late recurrence</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Multi-cohort molecular validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">Independent tissue cohorts in the original study</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Adjacent-liver expression signature predicted late recurrence and background-liver risk</span></div></div>
 <div class="tool-links">
+<a class="tool-link" href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE10143" target="_blank" rel="noopener">Expression data (GEO GSE10143) →</a>
 <a class="tool-link reference" href="https://doi.org/10.1056/NEJMoa0804525" target="_blank">Reference →</a>
 </div>
 </div>
@@ -496,8 +477,8 @@
 </div>
 </div>
 </div>
-<div class="tool-description">Tumor Immune MicroEnvironment Spatial score integrating spatial immune markers with machine learning to estimate post-resection recurrence risk; a notable multicenter translational example.</div>
-<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Spatial immune competence and invasive-front/tumor-core organization</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Resection tissue / postoperative baseline risk</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Multiplex IHC spatial markers + XGBoost</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Post-resection recurrence / early recurrence risk</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Multicenter validated prediction model</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">Discovery n=61; validation n=231 from 5 multicenter cohorts</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Real-world accuracy 82.2%; specificity 85.7%; outperformed TNM/BCLC in reported analyses</span></div></div>
+<div class="tool-description">The Tumor Immune MicroEnvironment Spatial (TIMES) score uses five tissue markers measured in the tumor core and invasive front to classify recurrence risk after resection.</div>
+<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Spatial immune competence and invasive-front/tumor-core organization</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Resection tissue / postoperative baseline risk</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Multiplex IHC spatial markers + XGBoost</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Post-resection recurrence during follow-up, without a fixed prediction horizon</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Multicenter validated prediction model</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">61 patients in development and 231 in five independent test cohorts. Recurrence status was available for 163 test patients.</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Among 163 evaluable patients, accuracy was 82.2% and specificity was 85.7%. The area under the ROC curve was 0.82 (95% CI 0.76–0.89). A score ≥0.5 defined the high-score group.</span></div></div>
 <div class="tool-links">
 <a class="tool-link" href="https://sun.times.ustc.edu.cn/" target="_blank">Access Tool →</a>
 <a class="tool-link reference" href="https://doi.org/10.1038/s41586-025-08668-x" target="_blank">Reference →</a>
@@ -528,8 +509,8 @@
 <div class="tool-badges"><span class="tool-type type-ai">AI</span></div>
 </div>
 </div>
-<div class="tool-description">Contrast-enhanced CT texture analysis to identify invasive phenotypes associated with microvascular invasion and postoperative recurrence.</div>
-<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Microvascular invasion / aggressive tumor phenotype</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Preoperative</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Contrast-enhanced CT radiogenomic features</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">MVI and recurrence-related outcomes</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Multi-institutional biomarker validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">n=157 across 3 institutions</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">RVI predicted MVI with 89% accuracy, 76% sensitivity and 94% specificity; also associated with clinical outcomes</span></div></div>
+<div class="tool-description">This contrast-enhanced CT biomarker uses visually assessed imaging features to predict histologic microvascular invasion (MVI). The study also examined recurrence-free survival.</div>
+<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Microvascular invasion / aggressive tumor phenotype</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Preoperative</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Contrast-enhanced CT radiogenomic features</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Histologic MVI was the diagnostic endpoint. Recurrence-free survival was assessed separately.</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Multi-institutional biomarker validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">157 patients treated with resection or transplantation at three institutions</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">For histologic MVI, accuracy was 89%, sensitivity 76%, and specificity 94%. RVI was also associated with recurrence-free survival.</span></div></div>
 <div class="tool-links">
 <a class="tool-link reference" href="https://doi.org/10.1002/hep.27877" target="_blank">Reference →</a>
 </div>
@@ -541,8 +522,8 @@
 <div class="tool-badges"><span class="tool-type type-ai">AI</span></div>
 </div>
 </div>
-<div class="tool-description">Gadoxetic acid-enhanced MRI radiomics model for predicting early recurrence after HCC resection, outperforming conventional clinical-pathological models.</div>
-<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Tumor and peritumoral imaging phenotype</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Preoperative</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Gadoxetic acid-enhanced MRI radiomics</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Early (≤2 years) and late (&gt;2 years) recurrence</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Internal validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">n=167; training n=128, validation n=39</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Radiomic and combined clinicopathologic-radiomic models evaluated for early and late recurrence</span></div></div>
+<div class="tool-description">Preoperative gadoxetic acid-enhanced MRI was used to study recurrence after resection of a solitary HCC measuring 2–5 cm.</div>
+<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Tumor and peritumoral imaging phenotype</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Preoperative</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Gadoxetic acid-enhanced MRI radiomics</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Early (≤2 years) and late (&gt;2 years) recurrence</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Internal validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">n=167; training n=128, validation n=39</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">For early recurrence, the radiomics model that included a 3-mm peritumoral margin performed comparably to the postoperative clinicopathologic model.</span></div></div>
 <div class="tool-links">
 <a class="tool-link reference" href="https://doi.org/10.1158/1078-0432.CCR-18-2861" target="_blank">Reference →</a>
 </div>
@@ -554,11 +535,12 @@
 <div class="tool-badges"><span class="tool-type type-ai">AI</span></div>
 </div>
 </div>
-<div class="tool-description">Multiphase CT radiomics combining intra-tumoral and peritumoral features to build preoperative and postoperative recurrence models, externally validated across three centers.</div>
-<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Tumor aggressiveness, MVI-related and peritumoral interface features</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Preoperative and postoperative baseline</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Multiphase CECT tumor + peritumoral radiomics + clinical variables</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Post-resection recurrence / RFS</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Multi-institutional external validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">n=470 from 3 institutions; training n=210, internal validation n=107, external validation n=153</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Pre/post models C-index 0.733-0.801 across datasets; external tdAUC 0.803-0.813</span></div></div>
+<div class="tool-description">Ji and colleagues developed preoperative and postoperative models for patients undergoing resection of early-stage HCC meeting the Milan criteria. The published preoperative calculator was unavailable on 21 November 2026. The original nomogram is shown in Figure 3.</div>
+<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Tumor and peritumoral features associated with recurrence</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Preoperative and postoperative baseline</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Multiphase CECT tumor + peritumoral radiomics + clinical variables</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Recurrence after curative resection</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Multi-institutional external validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">295 patients from three institutions. Models were developed in 177 patients from one center and externally validated in 118 from two other centers.</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Both radiomics models achieved a C-index of at least 0.77 and an integrated Brier score of 0.14 or less in each cohort.</span></div></div>
 <div class="tool-links">
-<a class="tool-link" href="https://earlystagehccradiomicspost.shinyapps.io/dynnomapp/" target="_blank">Access Tool →</a>
-<a class="tool-link reference" href="https://doi.org/10.1016/j.ebiom.2019.10.057" target="_blank">Reference →</a>
+<a class="tool-link reference" href="https://pubs.rsna.org/cms/10.1148/radiol.2020191470/asset/images/large/radiol.2020191470.fig3.jpeg" target="_blank" rel="noopener">Published nomograms (Fig. 3) →</a>
+<a class="tool-link" href="https://earlystagehccradiomicspost.shinyapps.io/dynnomapp/" target="_blank" rel="noopener">Postoperative calculator →</a>
+<a class="tool-link reference" href="https://doi.org/10.1148/radiol.2020191470" target="_blank" rel="noopener">Ji et al., Radiology 2020 →</a>
 </div>
 </div>
 <div class="tool-card" data-category="ai">
@@ -613,8 +595,8 @@
 <div class="tool-badges"><span class="tool-type type-liquid">Liquid Biopsy</span></div>
 </div>
 </div>
-<div class="tool-description">Postoperative ctDNA detection is positioned here as molecular residual disease (MRD) assessment: it reflects residual tumor burden already present after curative treatment rather than only estimating baseline future recurrence probability.</div>
-<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Existing molecular residual disease / residual tumor burden</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Within days after surgery / postoperative MRD assessment</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Plasma ctDNA targeted sequencing</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">MRD and postoperative recurrence</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Postoperative prognostic validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">n=96 early/intermediate-stage patients</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Recurrence 60.9% in ctDNA+ vs 27.8% in ctDNA−; DFS HR 6.074</span></div></div>
+<div class="tool-description">Ye and colleagues compared recurrence after resection in patients with and without detectable postoperative circulating tumor DNA (ctDNA).</div>
+<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Postoperative tumor-derived DNA in plasma as a possible residual-disease signal</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Early postoperative blood sample</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Plasma ctDNA targeted sequencing</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Recurrence and disease-free survival after resection</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Prognostic association in an observational cohort</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">96 patients undergoing resection, including 60 with BCLC stage 0/A, 15 with stage B and 21 with stage C HCC</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Recurrence occurred in 60.9% of ctDNA-positive patients and 27.8% of ctDNA-negative patients during follow-up.</span></div></div>
 <div class="tool-links">
 <a class="tool-link reference" href="https://doi.org/10.3389/fonc.2022.834992" target="_blank">Reference →</a>
 </div>
@@ -626,53 +608,96 @@
 <div class="tool-badges"><span class="tool-type type-liquid">Liquid Biopsy</span></div>
 </div>
 </div>
-<div class="tool-description">Patient-specific tumor-informed ctDNA monitoring for postoperative MRD and molecular relapse detection during the MRD window and longitudinal follow-up. Clinical utility of MRD-guided intervention remains to be established.</div>
-<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Patient-specific MRD and molecular relapse</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">MRD window (2-12 weeks) + longitudinal surveillance</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Personalized tumor-informed 16-plex PCR-NGS ctDNA assay</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Dynamic MRD / early recurrence detection</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Real-world MRD validation; clinical utility not yet proven</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">Real-world n=125 (721 plasma samples); resection monitoring cohort n=52</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">All ctDNA-positive resection patients in the reported MRD window recurred; recurrence lead time longer than AFP (7.9 vs 2.2 months)</span></div></div>
+<div class="tool-description">Abdelrahim and colleagues tracked variants from the resected tumor in serial plasma samples. A genetically independent new HCC may escape detection by this approach.</div>
+<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Circulating DNA carrying variants from the index tumor</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">2–12 weeks after surgery, before adjuvant treatment, and during subsequent surveillance</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Personalized, tumor-informed plasma assay tracking up to 16 tumor variants</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Clinical recurrence after resection and lead time to detection</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Retrospective prognostic study</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">125 patients overall, including 52 in the resection cohort. Of these, 34 had an evaluable early postoperative sample.</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">All 10 patients with an early positive test recurred. Among 31 patients tested for both ctDNA and AFP, 11 recurred. The median lead time was 7.9 months for ctDNA and 2.2 months for AFP.</span></div></div>
 <div class="tool-links">
 <a class="tool-link reference" href="https://doi.org/10.1200/PO-24-00934" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="liquid">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">HepaAiQ plasma methylation assay</div>
+<div class="tool-badges"><span class="tool-type type-liquid">Liquid Biopsy</span></div>
+</div>
+</div>
+<div class="tool-description">Guo and colleagues assessed whether a plasma DNA methylation assay measured one month after HCC resection could identify patients at higher risk of recurrence.</div>
+<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">HCC-associated DNA methylation in plasma</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Before and approximately one month after resection</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Plasma cell-free DNA methylation assay</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">HCC recurrence during postoperative follow-up</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Prognostic association in a resection cohort</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">103 patients with paired preoperative and postoperative samples in the recurrence analysis</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Patients with a positive postoperative assay had a higher recurrence hazard than those with a negative assay (HR 3.33, 95% CI 1.87–5.92).</span></div></div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1002/ctm2.1652" target="_blank" rel="noopener">Guo et al., 2024 →</a>
+</div>
+</div>
+</div>
+<!-- Category 6: Other treatment settings -->
+<h2 class="section-title" id="context"><span class="icon">📋</span>6. Transplant and Mixed-Treatment Models<span class="line"></span></h2>
+<div class="tools-grid">
+<div class="tool-card" data-category="context">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">MORAL Score</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">Model of Recurrence After Liver Transplantation. Combines pre-transplant AFP, tumor burden and post-transplant pathology to assess recurrence risk following LT.</div>
+<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Post-transplant tumor biology and recurrence propensity</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Pre- and post-liver transplantation</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">AFP, NLR, tumor burden, explant pathology</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Post-LT recurrence</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Model development</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">Prospective cohort, n=339</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">c-statistic 0.82 (pre-MORAL), 0.87 (post-MORAL), 0.91 (combo-MORAL)</span></div></div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1097/SLA.0000000000001966" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="context">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">RETREAT Score</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">Risk Estimation of Tumor Recurrence After Transplant. Integrates pre-transplant AFP, tumor burden and post-transplant pathology; one of the most extensively validated LT recurrence tools.</div>
+<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Residual recurrence risk after liver transplantation</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">At liver transplantation / post-explant</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">AFP + MVI + viable tumor burden</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">Post-LT recurrence</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">External validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">Development n=721 across 3 centers; external validation n=340 at an independent center</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">C-statistic 0.77 in development and 0.82 in external validation</span></div></div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.1001/jamaoncol.2016.5116" target="_blank">Reference →</a>
+</div>
+</div>
+<div class="tool-card" data-category="context">
+<div class="tool-header">
+<div style="flex:1;">
+<div class="tool-name">Multi-Treatment RFS Model</div>
+<div class="tool-badges"><span class="tool-type type-clinical">Clinical</span></div>
+</div>
+</div>
+<div class="tool-description">A unified RFS assessment framework covering hepatic resection, liver transplantation and local ablation as curative-intent treatments.</div>
+<div class="tool-meta-grid"><div class="meta-item"><span class="meta-label">Biological Target</span><span class="meta-value">Baseline recurrence risk across curative-intent treatment settings</span></div><div class="meta-item"><span class="meta-label">Clinical Time Point</span><span class="meta-value">Peri-treatment baseline</span></div><div class="meta-item"><span class="meta-label">Data / Modality</span><span class="meta-value">Clinical-pathological variables</span></div><div class="meta-item"><span class="meta-label">Recurrence Endpoint</span><span class="meta-value">RFS after resection, liver transplantation, or local ablation</span></div><div class="meta-item"><span class="meta-label">Evidence Stage</span><span class="meta-value evidence">Model development + validation</span></div><div class="meta-item"><span class="meta-label">Cohort / Validation</span><span class="meta-value">Curative-treatment cohort spanning multiple modalities</span></div><div class="meta-item full-width"><span class="meta-label">Performance / Main Finding</span><span class="meta-value">Nomogram developed for recurrence-free and overall survival assessment</span></div></div>
+<div class="tool-links">
+<a class="tool-link reference" href="https://doi.org/10.3389/fonc.2022.946531" target="_blank">Reference →</a>
 </div>
 </div>
 </div>
 <!-- Summary Table -->
 <div class="summary-table-section">
-<h2 class="section-title" id="summary"><span class="icon">📊</span>Summary Comparison<span class="line"></span></h2>
-<table class="summary-table"><thead><tr><th>Category</th><th>Biological Target</th><th>Clinical Time Point</th><th>Main Strength</th><th>Key Limitation</th><th>Evidence Maturity</th></tr></thead><tbody><tr><td>Clinical-Pathological</td><td>Tumor burden, invasiveness, host clinical status; selected models address late recurrence or dynamic AFP risk</td><td>Mainly perioperative baseline; selected models update risk during follow-up</td><td>Accessible, interpretable, and closest to routine clinical workflows</td><td>Limited biological resolution; recurrence origin is usually not directly resolved</td><td>Development to multicenter/external validation; clinical impact varies by model</td></tr><tr><td>Bulk Molecular</td><td>Tumor dissemination, background-liver field effect, and bulk immune state</td><td>Surgical tissue / postoperative baseline risk</td><td>Provides biologically interpretable tissue-level risk signals</td><td>Bulk averaging, platform dependence, and cohort heterogeneity</td><td>Discovery to independent/multi-dataset validation</td></tr><tr><td>Single-cell &amp; Spatial</td><td>Cellular states, antigen presentation, immune competence, and spatial niches</td><td>Surgical tissue / baseline recurrence risk</td><td>High cellular and spatial biological resolution</td><td>Small discovery cohorts, sampling bias, cost, and limited standardization</td><td>Mostly discovery/early validation; TIMES has multicenter validation</td></tr><tr><td>AI &amp; Multimodal</td><td>Aggressive imaging/pathology phenotypes, MVI-related features, and tumor–host interface</td><td>Mainly preoperative; some postoperative models</td><td>Non-invasive or scalable high-dimensional phenotyping</td><td>Scanner/protocol dependence, interpretability, and transportability</td><td>Internal to multicenter external validation</td></tr><tr><td>Liquid Biopsy &amp; Dynamic Monitoring</td><td>Existing MRD, residual tumor burden, and molecular relapse</td><td>Postoperative MRD window and longitudinal surveillance</td><td>Dynamic, minimally invasive monitoring that may precede radiologic recurrence</td><td>Low shedding, assay heterogeneity, and tumor-informed assay requirements</td><td>Prognostic/MRD validation; MRD-guided clinical utility not yet established</td></tr></tbody></table>
+<h2 class="section-title" id="summary"><span class="icon">📊</span>Comparison of the Five Main Categories<span class="line"></span></h2>
+<table class="summary-table"><thead><tr><th>Category</th><th>Biological Target</th><th>Clinical Time Point</th><th>Main Strength</th><th>Key Limitation</th><th>Evidence Maturity</th></tr></thead><tbody><tr><td>Clinical-Pathological</td><td>Tumor burden, invasiveness, host clinical status; selected models address late recurrence or dynamic AFP risk</td><td>Mainly perioperative baseline; selected models update risk during follow-up</td><td>Accessible, interpretable, and closest to routine clinical workflows</td><td>Limited biological resolution; recurrence origin is usually not directly resolved</td><td>Development to multicenter/external validation; clinical impact varies by model</td></tr><tr><td>Bulk Molecular</td><td>Tumor dissemination, background-liver field effect, and bulk immune state</td><td>Surgical tissue / postoperative baseline risk</td><td>Provides biologically interpretable tissue-level risk signals</td><td>Bulk averaging, platform dependence, and cohort heterogeneity</td><td>Discovery to independent/multi-dataset validation</td></tr><tr><td>Single-cell &amp; Spatial</td><td>Cellular states, antigen presentation, immune competence, and spatial niches</td><td>Tissue from the initial resection or a recurrent lesion, depending on the study</td><td>High cellular and spatial biological resolution</td><td>Small discovery cohorts, sampling bias, cost, and limited standardization</td><td>Mostly discovery/early validation; TIMES has multicenter validation</td></tr><tr><td>AI &amp; Multimodal</td><td>Aggressive imaging/pathology phenotypes, MVI-related features, and tumor–host interface</td><td>Mainly preoperative; some postoperative models</td><td>Non-invasive or scalable high-dimensional phenotyping</td><td>Scanner/protocol dependence, interpretability, and transportability</td><td>Internal to multicenter external validation</td></tr><tr><td>Liquid Biopsy &amp; Dynamic Monitoring</td><td>Postoperative tumor-associated DNA signals in plasma</td><td>Postoperative MRD window and longitudinal surveillance</td><td>Dynamic, minimally invasive monitoring that may precede radiologic recurrence</td><td>Low shedding, assay heterogeneity, and potential underdetection of independent new tumors by tumor-informed assays</td><td>Prognostic associations reported. The benefit of ctDNA-guided management remains unproven.</td></tr></tbody></table>
 </div>
-<div class="note-box"><h3>📌 How to use this resource</h3><p><strong>Baseline risk stratification: </strong>Clinicopathological, molecular, imaging, and spatial approaches primarily estimate the probability of future recurrence, but they measure different biological processes and should not be ranked only by AUC or C-index.</p><p><strong>Biological interpretation: </strong>Tumor-derived signatures may reflect dissemination or aggressive clones, adjacent-liver signatures may capture field-effect carcinogenesis, and single-cell/spatial studies resolve cellular states and local immune ecosystems.</p><p><strong>Dynamic MRD monitoring: </strong>Postoperative ctDNA occupies a distinct clinical position because it aims to detect molecular residual disease that is already present and can be followed longitudinally.</p><p><strong>Evidence maturity: </strong>Performance should be interpreted together with calibration, external validation, cross-center reproducibility, assay standardization, and whether model-guided management has demonstrated clinical benefit.</p><p><strong>Scope: </strong>This portal is a curated, continuously updated companion resource. Evidence-stage labels are descriptive summaries of reported validation maturity and do not constitute a formal risk-of-bias reassessment.</p></div>
+<div class="note-box"><h3>📌 How to use this resource</h3><p><strong>Baseline risk stratification: </strong>Clinicopathological, molecular, imaging, and spatial approaches primarily estimate the probability of future recurrence, but they measure different biological processes and should not be ranked only by AUC or C-index.</p><p><strong>Biological interpretation: </strong>Tumor-derived signatures may reflect dissemination or aggressive clones, adjacent-liver signatures may capture field-effect carcinogenesis, and single-cell/spatial studies resolve cellular states and local immune ecosystems.</p><p><strong>Postoperative ctDNA monitoring. </strong>A positive result can signal possible molecular residual disease (MRD) after resection. Interpret serial results alongside imaging, especially in patients with a negative test.</p><p><strong>Evidence maturity: </strong>Performance should be interpreted together with calibration, external validation, cross-center reproducibility, assay standardization, and whether model-guided management has demonstrated clinical benefit.</p><p><strong>Selection and maintenance. </strong>Siwen Zhang, first author of the companion review, selects studies and tools for their relevance to recurrence after resection, including studies of recurrence biology. Each entry links to its source and identifies the study population, outcome and level of validation. The portal has no stated fixed update schedule or separate archival deposit.</p></div>
 <footer>
-<p style="margin-top: 8px; font-size: 0.8em;">Last updated: 2026-09-05</p>
+<p style="margin-top: 8px; font-size: 0.8em;">Last updated: 2026-11-21 · <a class="history-link" href="https://github.com/SiwenZhangXspace/SiwenZhangXspace.github.io/commits/main/">Revision history</a></p>
 </footer>
 </div>
 <script>
-        function filterTools(category) {
-            const cards = document.querySelectorAll('.tool-card');
-            const tags = document.querySelectorAll('.filter-tag');
-            
-            tags.forEach(tag => tag.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            cards.forEach(card => {
-                if (category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'block';
-                    card.style.animation = 'fadeInUp 0.4s ease-out';
-                } else {
-                    card.style.display = 'none';
+        const filters = document.querySelectorAll('[data-filter]');
+        const categoryHeadings = document.querySelectorAll('h2.section-title[id]');
+
+        for (const button of filters) {
+            button.addEventListener('click', () => {
+                const selected = button.dataset.filter;
+                for (const option of filters) {
+                    option.classList.toggle('active', option === button);
+                    option.setAttribute('aria-pressed', String(option === button));
                 }
-            });
-            
-            // Hide empty section titles when filtering
-            const sections = document.querySelectorAll('.section-title');
-            sections.forEach(section => {
-                const grid = section.nextElementSibling;
-                if (grid && grid.classList.contains('tools-grid')) {
-                    const visibleCards = grid.querySelectorAll('.tool-card:not([style*="display: none"])');
-                    if (visibleCards.length === 0 && category !== 'all') {
-                        section.style.display = 'none';
-                        grid.style.display = 'none';
-                    } else {
-                        section.style.display = 'flex';
-                        grid.style.display = 'grid';
-                    }
+                for (const heading of categoryHeadings) {
+                    const grid = heading.nextElementSibling;
+                    if (!grid || !grid.classList.contains('tools-grid')) continue;
+                    const visible = selected === 'all' || heading.id === selected;
+                    heading.hidden = !visible;
+                    grid.hidden = !visible;
                 }
             });
         }
